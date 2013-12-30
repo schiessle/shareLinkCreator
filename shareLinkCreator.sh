@@ -8,11 +8,12 @@
 # Description: 
 #
 # This script can be integrated in the Thunar file manager as a "custom
-# action". If you configure the "custom action" in Thunar, make sure that you
-# pass the parameter "%F" to the program. Once the custom action is configured
-# you can execute the program from the right-click context menu. The program
-# works for all file types and also for directories. Once the script gets
-# executed it will first upload the files/directories to your ownCloud and
+# action". If you configure the "custom action" in Thunar, make sure to pass
+# the paths of all selected files to the program using the "%F" parameter. The
+# program expects the absolute path to the files. Once the custom action is
+# configured you can execute the program from the right-click context menu. The
+# program works for all file types and also for directories. Once the script
+# gets executed it will first upload the files/directories to your ownCloud and
 # afterwards it will generate a public link to access them. The link will be
 # copied directly to your clipboard and a dialog will inform you about the
 # URL. If you uploaded a single file or directory than the file/directory will
@@ -87,7 +88,7 @@ createShare() {
     result=$(curl -u $username:$password --silent $shareAPI -d path=$1 -d shareType=3)
     shareLink=$(echo $result | sed -e 's/.*<url>\(.*\)<\/url>.*/\1/')
     shareLink=$(echo $shareLink | sed 's/\&amp;/\&/')
-    echo "foo" | xclip
+    echo $shareLink | xclip -sel clip
     return $TRUE
 
 }
@@ -122,6 +123,4 @@ fi
 output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
 zenity --info --title="ownCloud Public Link Creator" --text="$output" --no-markup
 
-# we need to write the share link to the clipboard at the end of the script
-echo $shareLink | xclip
 
