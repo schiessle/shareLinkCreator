@@ -78,6 +78,8 @@ uploadDirectory() {
             uploadDirectory "$1/$filePath" "$2/$filePath"      
         else
             curl -u $username:$password -T "$2/$filePath" "$1/$filePath"
+            count=$(($count+1))
+            echo $(($count*100/$numOfFiles)) >&3;
         fi
     done
 
@@ -116,7 +118,7 @@ fi
 
 exec 3> >(zenity --progress --title="ownCloud Public Link Creator" --text="Uploading files and generating a public link" --auto-kill --auto-close --percentage=0 --width=400)
 
-numOfFiles=$#
+numOfFiles=$(find $@ -type f | wc -l)
 count=0
 
 if baseDirExists; then
