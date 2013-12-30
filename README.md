@@ -20,7 +20,9 @@ programm will group them together in a directory named with the current
 timestamp.
 
 Before you can use the program you need to adjust at least the "baseURL",
-"username" and "password" config parametes at the top of the script.
+"username" and "password" config parametes at the top of the script. If you
+keep "username" and/or "password" empty a dialog will show up and ask for the
+credentials.
 
 Requirements:
 -------------
