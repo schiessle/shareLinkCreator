@@ -6,8 +6,9 @@ action". It is possible that the program also works with other file managers
 which provide similar possibilities, e.g Nautilus. But until now it was only
 tested and used with Thunar.
 
-If you configure the "custom action" in Thunar, make sure that you pass the
-parameter "%F" to the program. Once the custom action is configured you can
+If you configure the "custom action" in Thunar, make sure to pass the paths of
+all selected files to the program using the "%F" parameter. The program expects
+the absolute path to the files.  Once the custom action is configured you can
 execute the program from the right-click context menu. The program works for
 all file types and also for directories. Once the script gets executed it will
 first upload the files/directories to your ownCloud and afterwards it will
