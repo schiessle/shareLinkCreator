@@ -33,7 +33,7 @@
 
 # config parameters
 baseURL="http://localhost/oc"
-uploadTarget="instant%20links6"
+uploadTarget="instant%20links"
 username=""
 password=""
 
@@ -41,7 +41,8 @@ password=""
 TRUE=0
 FALSE=1
 
-url="$baseURL/remote.php/webdav/$uploadTarget"
+webdavURL="$baseURL/remote.php/webdav"
+url="$webdavURL/$uploadTarget"
 shareAPI="$baseURL/ocs/v1.php/apps/files_sharing/api/v1/shares"
 
 
@@ -51,6 +52,14 @@ baseDirExists() {
         return $FALSE
     fi
     return $TRUE
+}
+
+checkCredentials() {
+    curl -u $username:$password --silent --fail $webdavURL > /dev/null
+    if [ $? != 0 ]; then
+        zenity --error --title="ownCloud Public Link Creator" --text="Username or password does not match"
+        exit 1
+    fi
 }
 
 # upload files, first parameter will be the upload target from the second
@@ -116,6 +125,8 @@ if [ -z $password ] || [ -z $username ]; then
     askForPassword
 fi
 
+checkCredentials
+
 exec 3> >(zenity --progress --title="ownCloud Public Link Creator" --text="Uploading files and generating a public link" --auto-kill --auto-close --percentage=0 --width=400)
 
 numOfFiles=$(find $@ -type f | wc -l)
@@ -144,5 +155,3 @@ fi
 
 output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
 zenity --info --title="ownCloud Public Link Creator" --text="$output" --no-markup
-
-
