@@ -1,5 +1,5 @@
-shareLinkCreator
-================
+Share Link Creator
+==================
 
 This script can be integrated in the Thunar file manager as a "custom
 action". It is possible that the program also works with other file managers
@@ -20,7 +20,7 @@ programm will group them together in a directory named with the current
 timestamp.
 
 Before you can use the program you need to adjust at least the "baseURL",
-"username" and "password" config parameter below
+"username" and "password" config parametes at the top of the script.
 
 Requirements:
 -------------
