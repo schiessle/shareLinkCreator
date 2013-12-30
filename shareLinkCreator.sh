@@ -93,6 +93,27 @@ createShare() {
 
 }
 
+# if no username/password is set in the script we ask the user to enter them
+askForPassword() {
+    ENTRY=`zenity --password --username --title="ownCloud Public Link Creator"`
+
+    case $? in
+        0)
+	    username=`echo $ENTRY | cut -d'|' -f1`
+	    password=`echo $ENTRY | cut -d'|' -f2`
+	    ;;
+        1)
+            exit 0;;
+        -1)
+            exit 1;;
+esac
+
+}
+
+if [ -z $password ] || [ -z $username ]; then
+    askForPassword
+fi
+
 exec 3> >(zenity --progress --title="ownCloud Public Link Creator" --text="Uploading files and generating a public link" --auto-kill --auto-close --percentage=0 --width=400)
 
 numOfFiles=$#
