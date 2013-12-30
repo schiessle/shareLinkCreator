@@ -60,12 +60,12 @@ uploadFiles() {
     do
         if [ -f "$filePath" ]; then
             curl -u $username:$password -T $filePath "$1/$(basename $filePath)"
+            count=$(($count+1))
+            echo $(($count*100/$numOfFiles)) >&3;
         else
             curl -u $username:$password -X MKCOL "$1/$(basename $filePath)"
             uploadDirectory "$1/$(basename $filePath)" $filePath 
         fi
-        count=$(($count+1))
-        echo $(($count*100/$numOfFiles)) >&3;
     done
     return $TRUE
 }
