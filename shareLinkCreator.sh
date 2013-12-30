@@ -34,8 +34,8 @@
 # config parameters
 baseURL="http://localhost/oc"
 uploadTarget="instant%20links6"
-username="schiesbn"
-password="schiesbn"
+username=""
+password=""
 
 # constants
 TRUE=0
