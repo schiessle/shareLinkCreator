@@ -109,8 +109,7 @@ askForPassword() {
             exit 0;;
         -1)
             exit 1;;
-esac
-
+    esac
 }
 
 if [ -z $password ] || [ -z $username ]; then
