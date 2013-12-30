@@ -36,6 +36,9 @@ baseURL="http://localhost/oc"
 uploadTarget="instant%20links"
 username=""
 password=""
+# if you use a self signed ssl cert you can specify here the path to your root
+# certificate
+cacert=""
 
 # constants
 TRUE=0
@@ -44,18 +47,21 @@ FALSE=1
 webdavURL="$baseURL/remote.php/webdav"
 url="$webdavURL/$uploadTarget"
 shareAPI="$baseURL/ocs/v1.php/apps/files_sharing/api/v1/shares"
-
+curlOpts=""
+if [ -n "$cacert" ]; then
+    curlOpts="$curlOpts --cacert $cacert"
+fi
 
 # check if base dir for file upload exists
 baseDirExists() {
-    if curl -u $username:$password --output /dev/null --silent --head --fail "$url"; then
+    if curl -u $username:$password --output /dev/null $curlOpts --silent --head --fail "$url"; then
         return $FALSE
     fi
     return $TRUE
 }
 
 checkCredentials() {
-    curl -u $username:$password --silent --fail $webdavURL > /dev/null
+    curl -u "$username":"$password" $curlOpts --output /dev/null --silent --fail "$webdavURL"
     if [ $? != 0 ]; then
         zenity --error --title="ownCloud Public Link Creator" --text="Username or password does not match"
         exit 1
@@ -68,11 +74,11 @@ uploadFiles() {
     for filePath in ${@:2}
     do
         if [ -f "$filePath" ]; then
-            curl -u $username:$password -T $filePath "$1/$(basename $filePath)"
+            curl -u $username:$password $curlOpts -T $filePath "$1/$(basename $filePath)"
             count=$(($count+1))
             echo $(($count*100/$numOfFiles)) >&3;
         else
-            curl -u $username:$password -X MKCOL "$1/$(basename $filePath)"
+            curl -u $username:$password $curlOpts -X MKCOL "$1/$(basename $filePath)"
             uploadDirectory "$1/$(basename $filePath)" $filePath 
         fi
     done
@@ -84,10 +90,10 @@ uploadFiles() {
 uploadDirectory() {
     for filePath in `ls $2`; do
         if [ -d "$2/$filePath" ]; then
-            curl -u $username:$password -X MKCOL "$1/$filePath"
+            curl -u $username:$password $curlOpts -X MKCOL "$1/$filePath"
             uploadDirectory "$1/$filePath" "$2/$filePath"      
         else
-            curl -u $username:$password -T "$2/$filePath" "$1/$filePath"
+            curl -u $username:$password $curlOpts -T "$2/$filePath" "$1/$filePath"
             count=$(($count+1))
             echo $(($count*100/$numOfFiles)) >&3;
         fi
@@ -97,7 +103,7 @@ uploadDirectory() {
 
 # create public link share, first parameter contains the path of the shared file/folder
 createShare() {
-    result=$(curl -u $username:$password --silent $shareAPI -d path=$1 -d shareType=3)
+    result=$(curl -u $username:$password $curlOpts --silent $shareAPI -d path=$1 -d shareType=3)
     shareLink=$(echo $result | sed -e 's/.*<url>\(.*\)<\/url>.*/\1/')
     shareLink=$(echo $shareLink | sed 's/\&amp;/\&/')
     echo $shareLink | xclip -sel clip
@@ -133,7 +139,7 @@ numOfFiles=$(find $@ -type f | wc -l)
 count=0
 
 if baseDirExists; then
-    curl -u $username:$password -X MKCOL "$url"
+    curl -u $username:$password $curlOpts -X MKCOL "$url"
 fi
 
 # if we have more than one file selected we create a folder with
@@ -141,7 +147,7 @@ fi
 if [ $# -gt 1 ]; then
     share=$(date +%s)
     url="$url/$share"
-    curl -u $username:$password -X MKCOL "$url"
+    curl -u $username:$password $curlOpts -X MKCOL "$url"
 elif [ $# -eq 1 ]; then
     share=$(basename $1)
 else
