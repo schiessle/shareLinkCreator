@@ -138,7 +138,6 @@ else
     exit 1
 fi
 
-args=("$@")
 if uploadFiles $url "$@"; then
     createShare "/$uploadTarget/$share"
 fi
