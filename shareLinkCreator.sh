@@ -33,7 +33,7 @@
 
 # config parameters
 baseURL="http://localhost/oc"
-uploadTarget="instant%20links"
+uploadTarget="instant links"
 username=""
 password=""
 # if you use a self signed ssl cert you can specify here the path to your root
@@ -45,7 +45,7 @@ TRUE=0
 FALSE=1
 
 webdavURL="$baseURL/remote.php/webdav"
-url="$webdavURL/$uploadTarget"
+url=$(echo "$webdavURL/$uploadTarget" | sed 's/\ /%20/g')
 shareAPI="$baseURL/ocs/v1.php/apps/files_sharing/api/v1/shares"
 curlOpts=""
 if [ -n "$cacert" ]; then
@@ -54,7 +54,7 @@ fi
 
 # check if base dir for file upload exists
 baseDirExists() {
-    if curl -u $username:$password --output /dev/null $curlOpts --silent --head --fail "$url"; then
+    if curl -u "$username":"$password" --output /dev/null $curlOpts --silent --head --fail "$url"; then
         return $FALSE
     fi
     return $TRUE
@@ -71,15 +71,17 @@ checkCredentials() {
 # upload files, first parameter will be the upload target from the second
 # parameter on we have the list of files
 uploadFiles() {
-    for filePath in ${@:2}
+    for filePath in "${@:2}"
     do
+        basename=$(basename "$filePath")
+        basename=$(echo "$basename" | sed 's/\ /%20/g')
         if [ -f "$filePath" ]; then
-            curl -u $username:$password $curlOpts -T $filePath "$1/$(basename $filePath)"
+            curl -u "$username":"$password" $curlOpts -T "$filePath" "$1/$basename"
             count=$(($count+1))
             echo $(($count*100/$numOfFiles)) >&3;
         else
-            curl -u $username:$password $curlOpts -X MKCOL "$1/$(basename $filePath)"
-            uploadDirectory "$1/$(basename $filePath)" $filePath 
+            curl -u "$username":"$password" $curlOpts -X MKCOL "$1/$basename"
+            uploadDirectory "$1/$basename" "$filePath"
         fi
     done
     return $TRUE
@@ -88,22 +90,24 @@ uploadFiles() {
 # upload a directory recursively, first parameter contains the upload target
 # and the second parameter contains the path to the local directory
 uploadDirectory() {
-    for filePath in `ls $2`; do
+    while read filePath; do
+        filePath=$(basename "$filePath")
+        urlencodedFilePath=$(echo "$filePath" | sed 's/\ /%20/g')
         if [ -d "$2/$filePath" ]; then
-            curl -u $username:$password $curlOpts -X MKCOL "$1/$filePath"
-            uploadDirectory "$1/$filePath" "$2/$filePath"      
+            curl -u "$username":"$password" $curlOpts -X MKCOL "$1/$urlencodedFilePath"
+            uploadDirectory "$1/$urlencodedFilePath" "$2/$filePath"
         else
-            curl -u $username:$password $curlOpts -T "$2/$filePath" "$1/$filePath"
+            curl -u "$username":"$password" $curlOpts -T "$2/$filePath" "$1/$urlencodedFilePath"
             count=$(($count+1))
             echo $(($count*100/$numOfFiles)) >&3;
         fi
-    done
+    done < <(find "$2" -mindepth 1 -maxdepth 1)
 
 }
 
 # create public link share, first parameter contains the path of the shared file/folder
 createShare() {
-    result=$(curl -u $username:$password $curlOpts --silent $shareAPI -d path=$1 -d shareType=3)
+    result=$(curl -u "$username":"$password" $curlOpts --silent "$shareAPI" -d path="$1" -d shareType=3)
     shareLink=$(echo $result | sed -e 's/.*<url>\(.*\)<\/url>.*/\1/')
     shareLink=$(echo $shareLink | sed 's/\&amp;/\&/')
     echo $shareLink | xclip -sel clip
@@ -135,11 +139,11 @@ checkCredentials
 
 exec 3> >(zenity --progress --title="ownCloud Public Link Creator" --text="Uploading files and generating a public link" --auto-kill --auto-close --percentage=0 --width=400)
 
-numOfFiles=$(find $@ -type f | wc -l)
+numOfFiles=$(find "$@" -type f | wc -l)
 count=0
 
 if baseDirExists; then
-    curl -u $username:$password $curlOpts -X MKCOL "$url"
+    curl -u "$username":"$password" $curlOpts -X MKCOL "$url"
 fi
 
 # if we have more than one file selected we create a folder with
@@ -147,9 +151,9 @@ fi
 if [ $# -gt 1 ]; then
     share=$(date +%s)
     url="$url/$share"
-    curl -u $username:$password $curlOpts -X MKCOL "$url"
+    curl -u "$username":"$password" $curlOpts -X MKCOL "$url"
 elif [ $# -eq 1 ]; then
-    share=$(basename $1)
+    share=$(basename "$1")
 else
     zenity --error --title="ownCloud Public Link Creator" --text="no file was selected!"
     exit 1
