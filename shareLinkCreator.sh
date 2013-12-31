@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+# Public Link Creator Version 1.0
+#
 # (c) Copyright 2013 Bjoern Schiessle <bjoern@schiessle.org>
 #
 # This program is free software released under the MIT License, for more details
