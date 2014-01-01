@@ -2,9 +2,10 @@ Share Link Creator
 ==================
 
 This script can be integrated in the Thunar file manager as a "custom
-action". It is possible that the program also works with other file managers
-which provide similar possibilities, e.g Nautilus. But until now it was only
-tested and used with Thunar.
+action". The program should also works with other file managers which provide
+similar possibilities to integrate shell scripts. I developed and used this
+script with Thunar only but I got some feedback that it also works nicely with
+Dolphin and Nautilus.
 
 If you configure the "custom action" in Thunar, make sure to pass the paths of
 all selected files to the program using the "%F" parameter. The program expects

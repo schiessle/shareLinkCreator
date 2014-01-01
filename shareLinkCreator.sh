@@ -9,6 +9,11 @@
 #
 # Description: 
 #
+# The program was developed for the Thunar file manager but it should also
+# works with other file managers which provide similar possibilities to
+# integrate shell scripts. For example I got some feedback that it also works
+# nicely with Dolphin and Nautilus.
+#
 # This script can be integrated in the Thunar file manager as a "custom
 # action". If you configure the "custom action" in Thunar, make sure to pass
 # the paths of all selected files to the program using the "%F" parameter. The
