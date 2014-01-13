@@ -1,0 +1,7 @@
+[Nemo Action]
+Active=true
+Name=Share Link
+Comment=Share file with a link to download from ownCloud
+Exec=/path/to/shareLinkCreator/shareLinkCreator %F
+Selection=S
+Extensions=any;
