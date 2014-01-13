@@ -39,7 +39,7 @@ Installing with Nemo (Linux Mint)
 
 You will need to copy the shareLinkCreator.nemo_action to:
 
-~/.local/share/nemo/actions/
+    ~/.local/share/nemo/actions/
 
 Next edit the file, and replace
 
