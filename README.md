@@ -1,6 +1,10 @@
 Share Link Creator
 ==================
 
+Provides the ability to upload a file to OwnCloud via a supported file manager
+and receive a link to the uploaded file which can then be emailed or shared in
+another way.
+
 This script can be integrated in the Thunar file manager as a "custom
 action". The program should also works with other file managers which provide
 similar possibilities to integrate shell scripts. I developed and used this
