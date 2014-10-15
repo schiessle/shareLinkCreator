@@ -47,6 +47,9 @@ password=""
 # certificate
 cacert=""
 
+# Switch to 0 to use echo instead of zenity
+usezenity=1
+
 # constants
 TRUE=0
 FALSE=1
@@ -70,8 +73,14 @@ baseDirExists() {
 checkCredentials() {
     curl -u "$username":"$password" $curlOpts --output /dev/null --silent --fail "$webdavURL"
     if [ $? != 0 ]; then
-        zenity --error --title="ownCloud Public Link Creator" --text="Username or password does not match"
-        exit 1
+        msg="Username or password does not match"
+        if [ $usezenity -eq 1 ]; then
+            zenity --error --title="ownCloud Public Link Creator" --text=$msg
+            exit 1
+        else
+            echo $msg
+            exit 1
+        fi
     fi
 }
 
@@ -138,13 +147,30 @@ askForPassword() {
     esac
 }
 
+askForPasswordNonZenity() {
+    read -p "Username: " username
+    read -p "Password: " password
+    if [ -z $password ] || [ -z $username ]; then
+        exit 1
+    fi
+}
+
+
 if [ -z $password ] || [ -z $username ]; then
-    askForPassword
+    if [ $usezenity -eq 1 ]; then askForPassword
+    else askForPasswordNonZenity
+    fi
 fi
 
 checkCredentials
 
-exec 3> >(zenity --progress --title="ownCloud Public Link Creator" --text="Uploading files and generating a public link" --auto-kill --auto-close --percentage=0 --width=400)
+msg="Uploading files and generating a public link"
+if [ $usezenity -eq 1 ]; then
+    exec 3> >(zenity --progress --title="ownCloud Public Link Creator" --text=$msg --auto-kill --auto-close --percentage=0 --width=400)
+else
+    echo $msg
+fi
+
 
 numOfFiles=$(find "$@" -type f | wc -l)
 count=0
@@ -162,7 +188,10 @@ if [ $# -gt 1 ]; then
 elif [ $# -eq 1 ]; then
     share=$(basename "$1")
 else
-    zenity --error --title="ownCloud Public Link Creator" --text="no file was selected!"
+    msg="no file was selected!"
+    if [ $usezenity -eq 1 ]; then zenity --error --title="ownCloud Public Link Creator" --text=$msg
+    else echo $msg
+    fi
     exit 1
 fi
 
@@ -171,4 +200,8 @@ if uploadFiles $url "$@"; then
 fi
 
 output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
-zenity --info --title="ownCloud Public Link Creator" --text="$output" --no-markup
+if [ $usezenity -eq 1 ]; then
+    zenity --info --title="ownCloud Public Link Creator" --text="$output" --no-markup
+else
+    echo $output
+fi
