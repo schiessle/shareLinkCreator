@@ -94,7 +94,9 @@ uploadFiles() {
         if [ -f "$filePath" ]; then
             curl -u "$username":"$password" $curlOpts -T "$filePath" "$1/$basename"
             count=$(($count+1))
-            echo $(($count*100/$numOfFiles)) >&3;
+            if [ $usezenity -eq 1 ]; then
+                echo $(($count*100/$numOfFiles)) >&3;
+            fi
         else
             curl -u "$username":"$password" $curlOpts -X MKCOL "$1/$basename"
             uploadDirectory "$1/$basename" "$filePath"
@@ -115,7 +117,9 @@ uploadDirectory() {
         else
             curl -u "$username":"$password" $curlOpts -T "$2/$filePath" "$1/$urlencodedFilePath"
             count=$(($count+1))
-            echo $(($count*100/$numOfFiles)) >&3;
+            if [ $usezenity -eq 1 ]; then
+                echo $(($count*100/$numOfFiles)) >&3;
+            fi
         fi
     done < <(find "$2" -mindepth 1 -maxdepth 1)
 
