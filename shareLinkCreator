@@ -153,7 +153,8 @@ askForPassword() {
 
 askForPasswordNonZenity() {
     read -p "Username: " username
-    read -p "Password: " password
+    read -s -p "Password: " password
+    echo
     if [ -z $password ] || [ -z $username ]; then
         exit 1
     fi
