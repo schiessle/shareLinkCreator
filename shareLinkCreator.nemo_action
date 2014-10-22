@@ -2,6 +2,7 @@
 Active=true
 Name=Share Link
 Comment=Share file with a link to download from ownCloud
-Exec=/path/to/shareLinkCreator/shareLinkCreator %F
+Exec=~/bin/shareLinkCreator %F
+Icon=owncloud.png
 Selection=S
 Extensions=any;
