@@ -1,0 +1,14 @@
+<action>
+        <icon>owncloud.png</icon>
+        <name>Send to ownCloud</name>
+        <unique-id>1413987903893246-3</unique-id>
+        <command>~/bin/shareLinkCreator %F</command>
+        <description>Upload selected files to ownCloud</description>
+        <patterns>*</patterns>
+        <audio-files/>
+        <image-files/>
+        <other-files/>
+        <text-files/>
+        <video-files/>
+</action>
+</actions>
