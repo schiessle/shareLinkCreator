@@ -1,9 +1,14 @@
 #!/bin/bash
+# config parameters for the shareLinkCreator
 
 baseURL="https://localhost/ownCloud"
 uploadTarget="instant links"
 username=""
 password=""
+
 # if you use a self signed ssl cert you can specify here the path to your root
 # certificate
 cacert=""
+
+# Switch to 0 to use echo instead of zenity
+usezenity=1
