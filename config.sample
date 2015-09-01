@@ -1,0 +1,9 @@
+#!/bin/bash
+
+baseURL="https://localhost/ownCloud"
+uploadTarget="instant links"
+username=""
+password=""
+# if you use a self signed ssl cert you can specify here the path to your root
+# certificate
+cacert=""
