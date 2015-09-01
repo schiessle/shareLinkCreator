@@ -135,8 +135,23 @@ createShare() {
 
 }
 
-# if no username/password is set in the script we ask the user to enter them
+# if no password is set in the script we ask the user to enter them
 askForPassword() {
+    ENTRY=`zenity --password --title="ownCloud Public Link Creator"`
+
+    case $? in
+        0)
+	    password=`echo $ENTRY | cut -d'|' -f1`
+	    ;;
+        1)
+            exit 0;;
+        -1)
+            exit 1;;
+    esac
+}
+
+# if no username/password is set in the script we ask the user to enter them
+askForUserPassword() {
     ENTRY=`zenity --password --username --title="ownCloud Public Link Creator"`
 
     case $? in
@@ -151,7 +166,7 @@ askForPassword() {
     esac
 }
 
-askForPasswordNonZenity() {
+askForUserPasswordNonZenity() {
     read -p "Username: " username
     read -s -p "Password: " password
     echo
@@ -160,12 +175,30 @@ askForPasswordNonZenity() {
     fi
 }
 
+askForPasswordNonZenity() {
+    read -s -p "Password for $username: " password
+    echo
+    if [ -z $password ] || [ -z $username ]; then
+        exit 1
+    fi
+}
 
-if [ -z $password ] || [ -z $username ]; then
+
+
+
+
+if [ -z $password ] && [ -z $username ]; then
+# ask for both password and username
+    if [ $usezenity -eq 1 ]; then askForUserPassword
+    else askForUserPasswordNonZenity
+    fi
+elif [ -z $password ]; then
+# ask for password only
     if [ $usezenity -eq 1 ]; then askForPassword
     else askForPasswordNonZenity
     fi
 fi
+
 
 checkCredentials
 
