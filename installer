@@ -3,29 +3,48 @@
 # test for dependencies
 if command -v zenity >/dev/null 2>&1;
 then
-    echo "Looking for zenity...OK.\n"
+    echo -e "Looking for zenity...OK.\n"
 else
-	echo "Looking for zenity...MISSING.\nPlease install it and restart this installer.\n"
+	echo -e "Looking for zenity...MISSING.\nPlease install it and restart this installer.\n"
 	exit;
 fi
 
 if command -v xclip >/dev/null 2>&1;
 then
-    echo "Looking for xclip...OK.\n"
+    echo -e "Looking for xclip...OK.\n"
 else
-	echo "Looking for xclip...MISSING.\nPlease install it and restart this installer.\n"
+	echo -e "Looking for xclip...MISSING.\nPlease install it and restart this installer.\n"
 	exit;
 fi
 
 if command -v curl >/dev/null 2>&1;
 then
-    echo "Looking for curl...OK.\n"
+    echo -e "Looking for curl...OK.\n"
 else
-	echo "Looking for curl...MISSING.\nPlease install it and restart this installer.\n"
+	echo -e "Looking for curl...MISSING.\nPlease install it and restart this installer.\n"
 	exit;
 fi
 
-sleep 10
+if [ -f config  ]
+then
+	echo "config file exists..."
+else
+  echo -e "config file...MISSSING.\nPlease edit config.sample and copy it to config before running this installer.\n"
+  exit;
+fi
+
+sleep 2
+
+## nautilus specific
+if [ -f /usr/bin/nautilus ]
+then
+	echo "Nautilus installed, copying to nautilus scripts..."
+	cp shareLinkCreator ~/.local/share/nautilus/scripts/
+	cp config ~/.local/share/nautilus/scripts/
+  exit;
+else
+    echo "Nautilus is not installed."
+fi
 
 # add icon
 echo "Installing owncloud icon to your homedir (/home/$(whoami)/.icons)..."
@@ -51,7 +70,7 @@ then
 	# replace last line "</actions>"
 	sed -i '$d' ~/.config/Thunar/uca.xml
 	cat shareLinkCreator.thunar_action >> ~/.config/Thunar/uca.xml
-	
+
 	echo "Restarting Thunar."
 	killall -9 thunar -u $(whoami)
 	thunar
