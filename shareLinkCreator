@@ -118,7 +118,7 @@ uploadDirectory() {
 
 # create public link share, first parameter contains the path of the shared file/folder
 createShare() {
-    result=$(curl -u "$username":"$password" $curlOpts --silent "$shareAPI" -d path="$1" -d shareType=3)
+    result=$(curl -u "$username":"$password" $curlOpts --silent "$shareAPI" -d path="$1" -d shareType=3 -H "OCS-APIRequest: true")
     shareLink=$(echo $result | sed -e 's/.*<url>\(.*\)<\/url>.*/\1/')
     shareLink=$(echo $shareLink | sed 's/\&amp;/\&/')
     echo $shareLink | xclip -sel clip
