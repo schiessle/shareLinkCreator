@@ -1,8 +1,8 @@
 [Nemo Action]
 Active=true
 Name=Share Link
-Comment=Share file with a link to download from ownCloud
+Comment=Share file with a link to download from Nextcloud
 Exec=~/bin/shareLinkCreator %F
-Icon=owncloud.png
+Icon=nextcloud.png
 Selection=S
 Extensions=any;

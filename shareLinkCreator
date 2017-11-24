@@ -20,7 +20,7 @@
 # program expects the absolute path to the files. Once the custom action is
 # configured you can execute the program from the right-click context menu. The
 # program works for all file types and also for directories. Once the script
-# gets executed it will first upload the files/directories to your ownCloud and
+# gets executed it will first upload the files/directories to your Nextcloud and
 # afterwards it will generate a public link to access them. The link will be
 # copied directly to your clipboard and a dialog will inform you about the
 # URL. If you uploaded a single file or directory than the file/directory will
@@ -66,7 +66,7 @@ checkCredentials() {
     if [ $? != 0 ]; then
         msg="Username or password does not match"
         if [ $usezenity -eq 1 ]; then
-            zenity --error --title="ownCloud Public Link Creator" --text=$msg
+            zenity --error --title="Nextcloud Public Link Creator" --text=$msg
             exit 1
         else
             echo $msg
@@ -128,7 +128,7 @@ createShare() {
 
 # if no password is set in the script we ask the user to enter them
 askForPassword() {
-    ENTRY=`zenity --password --title="ownCloud Public Link Creator"`
+    ENTRY=`zenity --password --title="Nextcloud Public Link Creator"`
 
     case $? in
         0)
@@ -143,7 +143,7 @@ askForPassword() {
 
 # if no username/password is set in the script we ask the user to enter them
 askForUserPassword() {
-    ENTRY=`zenity --password --username --title="ownCloud Public Link Creator"`
+    ENTRY=`zenity --password --username --title="Nextcloud Public Link Creator"`
 
     case $? in
         0)
@@ -195,7 +195,7 @@ checkCredentials
 
 msg="Uploading files and generating a public link"
 if [ $usezenity -eq 1 ]; then
-    exec 3> >(zenity --progress --title="ownCloud Public Link Creator" --text=$msg --auto-kill --auto-close --percentage=0 --width=400)
+    exec 3> >(zenity --progress --title="Nextcloud Public Link Creator" --text=$msg --auto-kill --auto-close --percentage=0 --width=400)
 else
     echo $msg
 fi
@@ -218,7 +218,7 @@ elif [ $# -eq 1 ]; then
     share=$(basename "$1")
 else
     msg="no file was selected!"
-    if [ $usezenity -eq 1 ]; then zenity --error --title="ownCloud Public Link Creator" --text=$msg
+    if [ $usezenity -eq 1 ]; then zenity --error --title="Nextcloud Public Link Creator" --text=$msg
     else echo $msg
     fi
     exit 1
@@ -230,7 +230,7 @@ fi
 
 output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
 if [ $usezenity -eq 1 ]; then
-    zenity --info --title="ownCloud Public Link Creator" --text="$output" --no-markup
+    zenity --info --title="Nextcloud Public Link Creator" --text="$output" --no-markup
 else
     echo $output
 fi

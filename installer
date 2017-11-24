@@ -47,11 +47,11 @@ else
 fi
 
 # add icon
-echo "Installing owncloud icon to your homedir (/home/$(whoami)/.icons)..."
+echo "Installing Nextcloud icon to your homedir (/home/$(whoami)/.icons)..."
 if [ ! -d "~/.icons" ]; then
   mkdir ~/.icons
 fi
-cp icon.png ~/.icons/
+cp nextcloud.png ~/.icons/
 
 # place core bash script
 echo "Installing sharing script to your homedir (/home/$(whoami)/bin)..."

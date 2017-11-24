@@ -1,7 +1,7 @@
 #!/bin/bash
 # config parameters for the shareLinkCreator
 
-baseURL="https://localhost/ownCloud"
+baseURL="https://localhost/nextcloud"
 uploadTarget="instant links"
 username=""
 password=""

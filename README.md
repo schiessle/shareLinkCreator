@@ -1,7 +1,7 @@
 Share Link Creator
 ==================
 
-Provides the ability to upload a file to OwnCloud via a supported file manager
+Provides the ability to upload a file to Nextcloud via a supported file manager
 and receive a link to the uploaded file which can then be emailed or shared in
 another way.
 
@@ -14,7 +14,7 @@ Dolphin, Nautilus and Nemo.
 The program expects the absolute path to the files.  Once the custom action is
 configured you can execute the program from the right-click context menu. The
 program works for all file types and also for directories. Once the script gets
-executed it will first upload the files/directories to your ownCloud and
+executed it will first upload the files/directories to your Nextcloud and
 afterwards it will generate a public link to access them. The link will be
 copied directly to your clipboard and a dialog will inform you about the
 URL. If you uploaded a single file or directory than the file/directory will be
