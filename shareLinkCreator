@@ -7,7 +7,7 @@
 # This program is free software released under the MIT License, for more details
 # see LICENSE.txt or http://opensource.org/licenses/MIT
 #
-# Description: 
+# Description:
 #
 # The program was developed for the Thunar file manager but it should also
 # works with other file managers which provide similar possibilities to
@@ -176,7 +176,13 @@ askForPasswordNonZenity() {
 
 
 
-
+if [ $# -lt 1 ]; then
+    msg="no file was selected!"
+    if [ $usezenity -eq 1 ]; then zenity --error --title="Nextcloud Public Link Creator" --text="$msg"
+    else echo "$msg"
+    fi
+    exit 1
+fi
 
 if [ -z $password ] && [ -z $username ]; then
 # ask for both password and username
@@ -189,7 +195,6 @@ elif [ -z $password ]; then
     else askForPasswordNonZenity
     fi
 fi
-
 
 checkCredentials
 
@@ -217,10 +222,7 @@ if [ $# -gt 1 ]; then
 elif [ $# -eq 1 ]; then
     share=$(basename "$1")
 else
-    msg="no file was selected!"
-    if [ $usezenity -eq 1 ]; then zenity --error --title="Nextcloud Public Link Creator" --text=$msg
-    else echo $msg
-    fi
+    # Errors for this are already shown above.
     exit 1
 fi
 
