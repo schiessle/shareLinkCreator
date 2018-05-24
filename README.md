@@ -9,7 +9,7 @@ This script can be integrated in the Thunar file manager as a "custom
 action". The program should also works with other file managers which provide
 similar possibilities to integrate shell scripts. I developed and used this
 script with Thunar only but I got some feedback that it also works nicely with
-Dolphin, Nautilus and Nemo.
+Dolphin, Nautilus, Krusader and Nemo.
 
 The program expects the absolute path to the files.  Once the custom action is
 configured you can execute the program from the right-click context menu. The
@@ -59,3 +59,11 @@ Next edit the file, and replace
 
 With the full path to the shareLinkCreator file, and voila!  Make sure you have
 configured the shareLinkCreator file as instructed above.
+
+Installing with Krusader
+------------------------
+
+Start Thunar and go to "Action-> Manage Your Useractions...". Here you can add a
+action to execute the shareLinkCreator.
+
+```Command: PathToShareLinkCreator/shareLinkCreator %aCurrent%```
