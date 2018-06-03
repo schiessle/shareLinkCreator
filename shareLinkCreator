@@ -121,7 +121,7 @@ createShare() {
     result=$(curl -u "$username":"$password" $curlOpts --silent "$shareAPI" -d path="$1" -d shareType=3 -H "OCS-APIRequest: true")
     shareLink=$(echo $result | sed -e 's/.*<url>\(.*\)<\/url>.*/\1/')
     shareLink=$(echo $shareLink | sed 's/\&amp;/\&/')
-    echo $shareLink | xclip -sel clip
+    echo -n $shareLink | xclip -sel clip
     return $TRUE
 
 }
