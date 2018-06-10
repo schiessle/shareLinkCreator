@@ -199,7 +199,9 @@ fi
 checkCredentials
 
 msg="Uploading files and generating a public link"
-if [ $usezenity -eq 1 ]; then
+if [ $usenotify -eq 1 ]; then
+    notify-send -c transfer "Nextcloud Public Link Creator" "$msg"
+elif [ $usezenity -eq 1 ]; then
     exec 3> >(zenity --progress --title="Nextcloud Public Link Creator" --text=$msg --auto-kill --auto-close --percentage=0 --width=400)
 else
     echo $msg
@@ -231,7 +233,11 @@ if uploadFiles $url "$@"; then
 fi
 
 output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
-if [ $usezenity -eq 1 ]; then
+if [ $usenotify -eq 1 ]; then
+    # Lazy hack for xfce4-notifyd cutting off long text
+    output="File uploaded successfully. Following public link was generated\nand copied to your clipboard:\n$shareLink"
+    notify-send -c transfer.complete "Nextcloud Public Link Creator" "$output"
+elif [ $usezenity -eq 1 ]; then
     zenity --info --title="Nextcloud Public Link Creator" --text="$output" --no-markup
 else
     echo $output

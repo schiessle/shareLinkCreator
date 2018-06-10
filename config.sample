@@ -12,3 +12,6 @@ cacert=""
 
 # Switch to 0 to use echo instead of zenity
 usezenity=1
+
+# Toggles use of notify-send (preferred over zenity for progress notifications)
+usenotify=1
