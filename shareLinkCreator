@@ -66,10 +66,10 @@ checkCredentials() {
     if [ $? != 0 ]; then
         msg="Username or password does not match"
         if [ $usezenity -eq 1 ]; then
-            zenity --error --title="Nextcloud Public Link Creator" --text=$msg
+            zenity --error --title="Nextcloud Public Link Creator" --text="$msg"
             exit 1
         else
-            echo $msg
+            echo "$msg"
             exit 1
         fi
     fi
