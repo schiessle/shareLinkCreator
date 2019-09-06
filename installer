@@ -29,7 +29,7 @@ if [ -f config  ]
 then
 	echo "config file exists..."
 else
-  echo -e "config file...MISSSING.\nPlease edit config.sample and copy it to config before running this installer.\n"
+  echo -e "config file...MISSING.\nPlease edit config.sample and copy it to config before running this installer.\n"
   exit;
 fi
 
