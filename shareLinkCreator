@@ -121,7 +121,9 @@ createShare() {
     result=$(curl -u "$username":"$password" $curlOpts --silent "$shareAPI" -d path="$1" -d shareType=3 -H "OCS-APIRequest: true")
     shareLink=$(echo $result | sed -e 's/.*<url>\(.*\)<\/url>.*/\1/')
     shareLink=$(echo $shareLink | sed 's/\&amp;/\&/')
-    echo -n $shareLink | xclip -sel clip
+    if command -v xclip >/dev/null 2>&1; then
+      echo -n $shareLink | xclip -sel clip
+    fi
     return $TRUE
 
 }
@@ -232,10 +234,23 @@ if uploadFiles $url "$@"; then
     createShare "/$uploadTarget/$share"
 fi
 
-output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
+if command -v xclip >/dev/null 2>&1; then
+    output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
+else
+    output="File uploaded successfully. Following public link was generated: $shareLink"
+fi
+
 if [ $usenotify -eq 1 ]; then
     # Lazy hack for xfce4-notifyd cutting off long text
+<<<<<<< HEAD
     output="File uploaded successfully. Following public link was generated\nand copied to your clipboard:\n$shareLink"
+=======
+    if command -v xclip >/dev/null 2>&1; then
+        output="File uploaded successfully. Following public link was generated\nand copied to your clipboard:\n<a href='$shareLink'>$shareLink</a>"
+    else
+        output="File uploaded successfully. Following public link was generated:\n<a href='$shareLink'>$shareLink</a>"
+    fi
+>>>>>>> e63cb31... avoid error if xclip is not reachable
     notify-send -c transfer.complete "Nextcloud Public Link Creator" "$output"
 elif [ $usezenity -eq 1 ]; then
     zenity --info --title="Nextcloud Public Link Creator" --text="$output" --no-markup
