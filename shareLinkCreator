@@ -235,7 +235,7 @@ fi
 output="File uploaded successfully. Following public link was generated and copied to your clipboard: $shareLink"
 if [ $usenotify -eq 1 ]; then
     # Lazy hack for xfce4-notifyd cutting off long text
-    output="File uploaded successfully. Following public link was generated\nand copied to your clipboard:\n$shareLink"
+    output="File uploaded successfully. Following public link was generated\nand copied to your clipboard:\n<a href='$shareLink'>$shareLink</a>"
     notify-send -c transfer.complete "Nextcloud Public Link Creator" "$output"
 elif [ $usezenity -eq 1 ]; then
     zenity --info --title="Nextcloud Public Link Creator" --text="$output" --no-markup
