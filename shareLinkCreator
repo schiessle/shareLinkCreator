@@ -184,12 +184,12 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
-if [ -z $password ] && [ -z $username ]; then
+if [ -z "$password" ] && [ -z "$username" ]; then
 # ask for both password and username
     if [ $usezenity -eq 1 ]; then askForUserPassword
     else askForUserPasswordNonZenity
     fi
-elif [ -z $password ]; then
+elif [ -z "$password" ]; then
 # ask for password only
     if [ $usezenity -eq 1 ]; then askForPassword
     else askForPasswordNonZenity
